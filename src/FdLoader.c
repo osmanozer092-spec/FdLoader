@@ -118,7 +118,7 @@ void main(void)
     fb_clear();
 
     fb_draw_string(50, 50, "Welcome to FdLoader!", COLOR_WHITE, 2);
-    fb_draw_string(50, 110, "VOL+ to load UEFI", COLOR_WHITE, 2);
+    fb_draw_string(50, 110, "VOL+ to load kernel", COLOR_WHITE, 2);
     fb_draw_string(50, 140, "VOL- to reboot", COLOR_WHITE, 2);
 
     while (1) {
