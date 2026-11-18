@@ -12,7 +12,7 @@ Example:
 ```
 cp /path/to/kernel images/kernel
 cp /path/to/dtb images/dtb
-make MKBOOTIMG=/path/to/mkbootimg.py
+make
 ```
 
 Requirements for `images/kernel`:
