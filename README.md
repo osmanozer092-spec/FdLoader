@@ -8,7 +8,7 @@ It shows a small menu on the screen to boot to binary image or reboot.
 | VOL +  | Copy the target binary to `0xA0000000` and jump to it |
 | VOL -  | Reboot via PMU software reset                 |
 
-The target binary is typically a UEFI firmware volume (e.g. `SILICIUM_UEFI.fd`) but can be any
+The target binary is typically a UEFI firmware volume (e.g. `UEFI.fd`) but can be any
 flat binary whose size is a multiple of 8 bytes and which is position dependent on `0xA0000000`.
 
 ## Build
@@ -18,7 +18,7 @@ Requirements: `aarch64-linux-gnu-` binutils and gcc, a dtb file.
 Build Command:
 
 ```
-make TARGET=/path/to/SILICIUM_UEFI.fd DTB=/path/to/a13.dtb MKBOOTIMG=/path/to/mkbootimg.py
+make BOARD=a04s
 ```
 
 ## Status
