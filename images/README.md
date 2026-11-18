@@ -12,7 +12,7 @@ Example:
 ```
 cp /path/to/kernel images/kernel
 cp /path/to/dtb images/dtb
-make
+make BOARD=a04s
 ```
 
 Requirements for `images/kernel`:
