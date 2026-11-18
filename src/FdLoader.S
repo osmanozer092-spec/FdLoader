@@ -1,3 +1,5 @@
+#include "board.h"
+
 .section .text.boot, "ax"
 .global _start
 
@@ -17,7 +19,7 @@ _start:
     bl   main
 
     mov  x4, x19
-    movz x5, #0xA000, lsl #16
+    ldr  x5, =BOARD_TARGET_ADDR
     mov  x20, x5
     ldr  x6, fd_size
     lsr  x6, x6, #3

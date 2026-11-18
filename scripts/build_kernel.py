@@ -12,6 +12,11 @@ def main():
     p.add_argument("--dtb", required=True)
     p.add_argument("--mkbootimg", required=True)
     p.add_argument("--payload", required=True)
+    p.add_argument("--base", required=True)
+    p.add_argument("--kernel-offset", required=True)
+    p.add_argument("--ramdisk-offset", required=True)
+    p.add_argument("--tags-offset", required=True)
+    p.add_argument("--header-version", required=True)
     p.add_argument("--output", required=True)
     args = p.parse_args()
 
@@ -34,11 +39,11 @@ def main():
         "--kernel", args.payload,
         "--ramdisk", "/dev/null",
         "--dtb", args.dtb,
-        "--base", "0x10000000",
-        "--kernel_offset", "0x00008000",
-        "--ramdisk_offset", "0x01000000",
-        "--tags_offset", "0x00000100",
-        "--header_version", "2",
+        "--base", args.base,
+        "--kernel_offset", args.kernel_offset,
+        "--ramdisk_offset", args.ramdisk_offset,
+        "--tags_offset", args.tags_offset,
+        "--header_version", args.header_version,
         "-o", args.output,
     ], check=True)
     print(f"{args.output} generated")

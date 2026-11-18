@@ -1,15 +1,8 @@
+c#include "board.h"
 #include "font.h"
 #include <stdint.h>
 
-#define FB_BASE       0xFA000000UL
-#define FB_WIDTH      720
-#define FB_HEIGHT     1600
-
-#define PIN_BASE      0x11850000UL
-#define VOL_UP_REG    (PIN_BASE + 0x04)
-#define VOL_DOWN_REG  (PIN_BASE + 0x24)
-
-#define PMU_SWRESET   (0x11860000UL + 0x3A00)
+#define REG32(addr)   (*(volatile uint32_t *)(uintptr_t)(addr))
 
 #define COLOR_WHITE   0xFFFFFFFF
 #define COLOR_BLACK   0x00000000
@@ -43,16 +36,16 @@ static void busy_wait(uint32_t n)
 
 static void fb_clear(void)
 {
-    volatile uint32_t *fb = (volatile uint32_t *)FB_BASE;
-    for (int i = 0; i < FB_WIDTH * FB_HEIGHT; i++) {
+    volatile uint32_t *fb = (volatile uint32_t *)(uintptr_t)BOARD_FB_BASE;
+    for (int i = 0; i < BOARD_FB_WIDTH * BOARD_FB_HEIGHT; i++) {
         fb[i] = COLOR_BLACK;
     }
 }
 
 static void fb_pixel(int x, int y, uint32_t color)
 {
-    volatile uint32_t *fb = (volatile uint32_t *)FB_BASE;
-    fb[y * FB_WIDTH + x] = color;
+    volatile uint32_t *fb = (volatile uint32_t *)(uintptr_t)BOARD_FB_BASE;
+    fb[y * BOARD_FB_WIDTH + x] = color;
 }
 
 static void fb_draw_char(int x, int y, char c, uint32_t color, int scale)
@@ -87,29 +80,27 @@ static void fb_draw_string(int x, int y, const char *str, uint32_t color, int sc
 
 static int vol_up_pressed(void)
 {
-    volatile uint32_t *reg = (volatile uint32_t *)VOL_UP_REG;
-    if ((*reg >> 7) & 1) {
+    if ((REG32(BOARD_VOL_UP_REG) >> BOARD_VOL_UP_BIT) & 1) {
         return 0;
     }
     busy_wait(100000);
-    return !((*reg >> 7) & 1);
+    return !((REG32(BOARD_VOL_UP_REG) >> BOARD_VOL_UP_BIT) & 1);
 }
 
 static int vol_down_pressed(void)
 {
-    volatile uint32_t *reg = (volatile uint32_t *)VOL_DOWN_REG;
-    if (*reg & 1) {
+    if ((REG32(BOARD_VOL_DOWN_REG) >> BOARD_VOL_DOWN_BIT) & 1) {
         return 0;
     }
     busy_wait(100000);
-    return !(*reg & 1);
+    return !((REG32(BOARD_VOL_DOWN_REG) >> BOARD_VOL_DOWN_BIT) & 1);
 }
 
 static void reboot(void)
 {
     fb_draw_string(50, 250, "Rebooting...", COLOR_WHITE, 2);
     wait_ms(1000);
-    *(volatile uint32_t *)PMU_SWRESET = 0x2;
+    REG32(BOARD_PMU_SWRESET_REG) = BOARD_PMU_SWRESET_VAL;
     while (1) { }
 }
 
@@ -118,12 +109,12 @@ void main(void)
     fb_clear();
 
     fb_draw_string(50, 50, "Welcome to FdLoader!", COLOR_WHITE, 2);
-    fb_draw_string(50, 110, "VOL+ to load UEFI", COLOR_WHITE, 2);
+    fb_draw_string(50, 110, "VOL+ to load kernel", COLOR_WHITE, 2);
     fb_draw_string(50, 140, "VOL- to reboot", COLOR_WHITE, 2);
 
     while (1) {
         if (vol_up_pressed()) {
-            fb_draw_string(50, 170, "Loading UEFI...", COLOR_WHITE, 2);
+            fb_draw_string(50, 170, "Loading kernel...", COLOR_WHITE, 2);
             return;
         }
         if (vol_down_pressed()) {

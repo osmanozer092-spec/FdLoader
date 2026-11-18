@@ -23,7 +23,7 @@ make TARGET=/path/to/SILICIUM_UEFI.fd DTB=/path/to/a13.dtb MKBOOTIMG=/path/to/mk
 
 ## Status
 
-- [ ] Tested on hardware: document device, firmware version and result here.
+- [X] Tested on Galaxy A04s
 
 Flashing a custom boot image can leave a device unbootable. Use at your own risk.
 
