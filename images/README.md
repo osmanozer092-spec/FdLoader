@@ -4,7 +4,7 @@ Place the input files for the build in this directory using these exact names:
 
 | File            | Description                                                                 |
 |-----------------|-----------------------------------------------------------------------------|
-| `images/kernel` | Binary loaded by FdLoader on VOL+ (e.g. a UEFI firmware volume such as `SILICIUM_UEFI.fd`) |
+| `images/kernel` | Binary loaded by FdLoader on VOL+ (e.g. a UEFI firmware volume such as `UEFI.fd`) |
 | `images/dtb`    | Device tree blob packed into the boot image                                 |
 
 Example:
