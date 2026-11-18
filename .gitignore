@@ -1,0 +1,11 @@
+build/*
+!build/.gitkeep
+*.o
+*.elf
+*.bin
+*.img
+*.fd
+*.dtb
+__pycache__/
+images/dtb
+images/kernel
